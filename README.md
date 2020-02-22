@@ -36,78 +36,77 @@ FGT#**diagnose sniffer packet any “host 202.106.2.1 and (port 500 or port 4500
 
       然后，通过日志信息以及debug app ike 确认问题是出在Ipsec 协商第一阶段还是第二阶段 
 
-      diagnose vpn ike log-filter dst-addr4 *124.65.148.86*           **//把IP换成对方公网IP** 
+      diagnose vpn ike log-filter dst-addr4 124.65.148.86           //把IP换成对方公网IP
 
       diagnose debug  application ike  -1 
 
       diagnose debug  enable 
 
 
-要注意：debug app ike的时候，自己不要主动发起连接，否则可能看不出故障的原因，特别是和友商对接的时候，由于报错的信息格式不一致，友商的报错信息，我们未必可以准确的读出来，而如果是被动接受协商，报错信息则在本地产生，应该一定可以知道协商失败的原因所在，因此我们需要把第一阶段/第二阶段的自动协商关闭。 
+      要注意：debug app ike的时候，自己不要主动发起连接，否则可能看不出故障的原因，特别是和友商对接的时候，由于报错的信息格式不一致，友商的报错信息，我们未必可以准确的读出来，而如果是被动接受协商，报错信息则在本地产生，应该一定可以知道协商失败的原因所在，因此我们需要把第一阶段/第二阶段的自动协商关闭。 
 
 
 **注意一：可能需要关掉一阶段第二阶段的自动协商** 
 
-如果是5.6之后的版本，只需要一条命令就可以完全关闭自己的主动发起的IKE连接请求： 
+      如果是5.6之后的版本，只需要一条命令就可以完全关闭自己的主动发起的IKE连接请求： 
 
-config vpn ipsec phase1-interface 
+      config vpn ipsec phase1-interface 
 
-    edit VPN-P1（第一阶段名称） 
+         edit VPN-P1（第一阶段名称） 
     
-        set passive-mode enable    //永远不主动发起IKE请求，即便使用流量触发，也不主动发起 
+            set passive-mode enable    //永远不主动发起IKE请求，即便使用流量触发，也不主动发起 
         
-        next 
+            next 
         
-    end 
+         end 
 
 
 如果是旧版本(5.2/5.4)则需要分别关闭第一阶段和第二阶段的自动协商： 
 
-FGT # config vpn ipsec phase1-interface 
+      FGT # config vpn ipsec phase1-interface 
 
-FGT (phase1-interface) # edit VPN-P1（第一阶段名称） 
+      FGT (phase1-interface) # edit VPN-P1（第一阶段名称） 
 
-FGT (VPN) # set auto-negotiate disable 
+      FGT (VPN) # set auto-negotiate disable 
 
-FGT (VPN) # end 
+      FGT (VPN) # end 
 
+      FGT # config vpn ipsec phase2-interface 
 
-FGT # config vpn ipsec phase2-interface 
+      FGT (phase1-interface) # edit VPN-P2 （第二阶段名称） 
 
-FGT (phase1-interface) # edit VPN-P2 （第二阶段名称） 
+      FGT (VPN) # set auto-negotiate disable 
 
-FGT (VPN) # set auto-negotiate disable 
-
-FGT (VPN) # end 
+      FGT (VPN) # end 
 
 
 **注意二：有时候需要重置IPsec VPN的连接** 
 
-（请谨慎使用，所有的VPN都会重新连接IKE，所有的VPN都会中断重连，影响业务，一般不需要使用这个命令） 
+      （请谨慎使用，所有的VPN都会重新连接IKE，所有的VPN都会中断重连，影响业务，一般不需要使用这个命令） 
 
 
-diagnose vpn ike gateway flush name to-hub   // 重置某一条VPN的第一阶段连接 
+      diagnose vpn ike gateway flush name to-hub   // 重置某一条VPN的第一阶段连接 
 
-diagnose vpn ike restart      //重新主动发起连接，会中断所有的VPN隧道 
+      diagnose vpn ike restart      //重新主动发起连接，会中断所有的VPN隧道 
 
-diagnose vpn tunnel reset  //重置第二阶段，会中断所有的VPN隧道 
+      diagnose vpn tunnel reset  //重置第二阶段，会中断所有的VPN隧道 
 
 
 **重置IPsec VPN通道，有VDOM的情况下：**
 
-FG200D4615810562 # config vdom 
+      FG200D4615810562 # config vdom 
 
-FG200D4615810562 (vdom) # edit root 
+      FG200D4615810562 (vdom) # edit root 
 
-FG200D4615810562 (root) # diagnose vpn tunnel reset 
+      FG200D4615810562 (root) # diagnose vpn tunnel reset 
 
-FG200D4615810562 (root) # diagnose vpn ike restart 
+      FG200D4615810562 (root) # diagnose vpn ike restart 
 
 
 **查看IPsec VPN状态命令：** 
 
-diagnose vpn ike gateway list 
+      diagnose vpn ike gateway list 
 
-diagnose vpn tunnel list 
+      diagnose vpn tunnel list 
 
 

@@ -21,27 +21,26 @@ FGT#**diagnose sniffer packet any “host 202.106.2.1 and (port 500 or port 4500
 
 **要注意：有时候需要关闭IPsec第一阶段里的NP加速，才可以抓取到完整的IKE协商过程**
 
-   FGT # config vpn ip phase1-interface 
+      FGT # config vpn ip phase1-interface 
 
-   FGT (phase1-interface) # edit Center 
+      FGT (phase1-interface) # edit Center 
+   
+      FGT (Center) # **set npu-offload disable**
 
-   FGT (Center) # **set npu-offload disable**
+      FGT (Center) # end 
 
-   FGT (Center) # end 
-
-
-   只有确保UDP 500/UDP 4500通信正常，才有接下来协商产生，才有协商成功或失败的定位，因此这是排查的第一步。 
+      只有确保UDP 500/UDP 4500通信正常，才有接下来协商产生，才有协商成功或失败的定位，因此这是排查的第一步。 
 
 
 ## IPsec隧道协商失败定位步骤：第二步 
 
-然后，通过日志信息以及debug app ike 确认问题是出在Ipsec 协商第一阶段还是第二阶段 
+      然后，通过日志信息以及debug app ike 确认问题是出在Ipsec 协商第一阶段还是第二阶段 
 
-diagnose vpn ike log-filter dst-addr4 *124.65.148.86*           **//把IP换成对方公网IP** 
+      diagnose vpn ike log-filter dst-addr4 *124.65.148.86*           **//把IP换成对方公网IP** 
 
-diagnose debug  application ike  -1 
+      diagnose debug  application ike  -1 
 
-diagnose debug  enable 
+      diagnose debug  enable 
 
 
 要注意：debug app ike的时候，自己不要主动发起连接，否则可能看不出故障的原因，特别是和友商对接的时候，由于报错的信息格式不一致，友商的报错信息，我们未必可以准确的读出来，而如果是被动接受协商，报错信息则在本地产生，应该一定可以知道协商失败的原因所在，因此我们需要把第一阶段/第二阶段的自动协商关闭。 

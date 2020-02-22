@@ -2,7 +2,7 @@
 
 <a href="https://www.fortinet.com/" target="_blank">Fortinet 官网</a>
 
-## IPsec隧道协商失败定位步骤：第一步 
+## **IPsec隧道协商失败定位步骤：第一步**
 
 先通过sniffer抓包确认用于协商的IKE协议UDP 500是否通信正常，是否中间ISP出现了故障，正常应该有去有回： 
 

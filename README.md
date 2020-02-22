@@ -1,5 +1,5 @@
 # Github-user-guide
-*****
+---
 1
 2
 3

@@ -7,7 +7,7 @@
 先通过sniffer抓包确认用于协商的IKE协议UDP 500是否通信正常，是否中间ISP出现了故障，正常应该有去有回： 
 
 
-    FGT#**diagnose sniffer packet any “host 202.106.2.1 and (port 500 or port 4500)” 4**
+FGT#**diagnose sniffer packet any “host 202.106.2.1 and (port 500 or port 4500)” 4**
 
      *12.650762 wan1 out 119.100.1.35.500 -> 202.106.2.1.500: udp 716*  
 

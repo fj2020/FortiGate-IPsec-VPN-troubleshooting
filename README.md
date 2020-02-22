@@ -18,7 +18,7 @@ FGT#diagnose sniffer packet any “host 202.106.2.1 and (port 500 or port 4500)�
 12.665846 wan1 in 202.106.2.1.500 -> 119.100.1.35.500: udp 380 
 
 
-要注意：有时候需要关闭IPsec第一阶段里的NP加速，才可以抓取到完整的IKE协商过程。 
+**要注意：有时候需要关闭IPsec第一阶段里的NP加速，才可以抓取到完整的IKE协商过程**
 
 
 FGT # config vpn ip phase1-interface 

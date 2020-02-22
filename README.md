@@ -37,7 +37,7 @@ FGT (Center) # end
 
 然后，通过日志信息以及debug app ike 确认问题是出在Ipsec 协商第一阶段还是第二阶段 
 
-diagnose vpn ike log-filter dst-addr4 *124.65.148.86* **//IP换成对方公网IP** 
+diagnose vpn ike log-filter dst-addr4 *124.65.148.86*           **//把IP换成对方公网IP** 
 
 diagnose debug  application ike  -1 
 
